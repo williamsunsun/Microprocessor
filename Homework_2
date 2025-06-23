@@ -1,0 +1,168 @@
+   ORG     00H
+        JMP     START
+        ORG     30H
+START1:
+        MOV     R0,#9         
+        MOV     DPTR,#LED_TABLE1
+		
+d1:
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P0,A            ; ?LED ? ??PORT-0
+        INC     DPTR            ; ????? LED ????
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P1,A            ; ?LED ? ??PORT-1
+        INC     DPTR            ; ????? LED ????
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P2,A            ; ?LED ? ??PORT-2
+        INC     DPTR            ; ????? LED ????
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P3,A            ; ?LED ? ??PORT-3
+        INC     DPTR            ; ????? LED ????
+        CALL    DELAY_03S      ; ???? 0.5 SECOND
+        DJNZ    R0,d1
+        JMP     START2;
+
+START2:
+        MOV     R0,#8     
+        MOV     DPTR,#LED_TABLE1
+		
+d1:
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P0,A            ; ?LED ? ??PORT-0
+        INC     DPTR            ; ????? LED ????
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P1,A            ; ?LED ? ??PORT-1
+        INC     DPTR            ; ????? LED ????
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P2,A            ; ?LED ? ??PORT-2
+        INC     DPTR            ; ????? LED ????
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P3,A            ; ?LED ? ??PORT-3
+        INC     DPTR            ; ????? LED ????
+        CALL    DELAY_05S      ; ???? 0.5 SECOND
+        DJNZ    R0,d1
+        JMP     START3;
+		
+START3:
+        MOV     R0,#6        
+        MOV     DPTR,#LED_TABLE1
+		
+d1:
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P0,A            ; ?LED ? ??PORT-0
+        INC     DPTR            ; ????? LED ????
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P1,A            ; ?LED ? ??PORT-1
+        INC     DPTR            ; ????? LED ????
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P2,A            ; ?LED ? ??PORT-2
+        INC     DPTR            ; ????? LED ????
+        CALL    READ_LEDCODE    ; ?LED ?
+        MOV     P3,A            ; ?LED ? ??PORT-3
+        INC     DPTR            ; ????? LED ????
+        CALL    DELAY_01S      ; ???? 0.5 SECOND
+        DJNZ    R0,d1
+        JMP     START1;
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+; ????? ? READ_LEDCODE
+; ?  ?    ? ?LED ??????? ACC ?
+;?????  ? A,DPTR
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+READ_LEDCODE:
+        MOV     A,#0            ;
+        MOVC    A,@A+DPTR       ; ?????????? P0
+        RET;
+
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+; ????? ? DELAY_0.2S
+;  ?  ?    ? ???? 0.5 SECOND
+;?????  ? R7,R6,R5
+;????    T=1+R7*[1+R6*(1+R5*2+2)+2]+2
+;             =1+5*[1+200*(1+1+248*2+2)+2]+2
+;             =500018 us = 0.5 SEC
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+;DELAY_0.5S: ??????????$??
+
+DELAY_03S:
+        MOV     R7,#03
+a3:        
+        MOV     R6,#200  ; ??1?????
+a2:
+        MOV     R5,#248
+        NOP              ; ??1?????
+a1: 
+        DJNZ    R5,a1    ; ??2?????
+        DJNZ    R6,a2
+        DJNZ    R7,a3
+        RET
+
+DELAY_05S:
+        MOV     R7,#05
+a3:        
+        MOV     R6,#200  ; ??1?????
+a2:
+        MOV     R5,#248
+        NOP              ; ??1?????
+a1: 
+        DJNZ    R5,a1    ; ??2?????
+        DJNZ    R6,a2
+        DJNZ    R7,a3
+        RET
+
+DELAY_01S:
+        MOV     R7,#01
+a3:        
+        MOV     R6,#200  ; ??1?????
+a2:
+        MOV     R5,#248
+        NOP              ; ??1?????
+a1: 
+        DJNZ    R5,a1    ; ??2?????
+        DJNZ    R6,a2
+        DJNZ    R7,a3
+        RET
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+; LED_TABLE  ??? 1 ??LED ??
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+LED_TABLE1:               ; LED ?????(????????)
+
+ DB 0FFH,0FFH,0FFH,0FFH   
+ DB 7FH,0FEH,7FH,0FEH
+ DB 3FH,0FCH,3FH,0FCH
+ DB 1FH,0F8H,1FH,0F8H
+ DB 0FH,0F0H,0FH,0F0H
+ DB 07H,0E0H,07H,0E0H
+ DB 03H,0C0H,03H.0C0H
+ DB 01H,80H,01H,80H 
+ DB 01H,00H,00H,80H
+END
+	
+LED_TABLE2:
+ DB 01H,80H,01H,80H 
+ DB 03H,0C0H,03H.0C0H
+ DB 07H,0E0H,07H,0E0H
+ DB 0FH,0F0H,0FH,0F0H
+ DB 1FH,0F8H,1FH,0F8H
+ DB 3FH,0FCH,3FH,0FCH
+ DB 7FH,0FEH,7FH,0FEH
+ DB 0FFH,0FFH,0FFH,0FFH   
+END
+	
+LED_TABLE3:
+ DB 00H,00H,00H,00H    
+ DB 0FFH,0FFH,0FFH,0FFH 
+ DB 00H,00H,00H,00H
+ DB 0FFH,0FFH,0FFH,0FFH  
+ DB 00H,00H,00H,00H
+ DB 0FFH,0FFH,0FFH,0FFH  
+END
