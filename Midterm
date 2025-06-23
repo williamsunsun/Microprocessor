@@ -1,0 +1,145 @@
+ ORG     00H
+        JMP     START1
+        ORG     30H
+START1:
+        MOV     R0,#5         
+        MOV     DPTR,#LED_TABLE1
+		
+d1:
+        CALL    READ_LEDCODE    
+        MOV     P3,A            
+        INC     DPTR            
+        CALL    READ_LEDCODE    
+        MOV     P2,A            
+        INC     DPTR            
+        CALL    READ_LEDCODE    
+        MOV     P1,A            
+        INC     DPTR            
+        CALL    READ_LEDCODE    
+        MOV     P0,A           
+        INC     DPTR            
+        CALL    DELAY_02S      
+        DJNZ    R0,d1
+        JMP     START2;
+
+START2:
+        MOV     R0,#4     
+        MOV     DPTR,#LED_TABLE2
+		
+d2:
+        CALL    READ_LEDCODE    
+        MOV     P3,A            
+        INC     DPTR            
+        CALL    READ_LEDCODE   
+        MOV     P2,A            
+        INC     DPTR           
+        CALL    READ_LEDCODE    
+        MOV     P1,A            
+        INC     DPTR            
+        CALL    READ_LEDCODE   
+        MOV     P0,A          
+        INC     DPTR            
+        CALL    DELAY_01S      
+        DJNZ    R0,d2
+        JMP     START3;
+		
+START3:
+        MOV     R0,#8        
+        MOV     DPTR,#LED_TABLE3
+		
+d3:
+        CALL    READ_LEDCODE    
+        MOV     P3,A            
+        INC     DPTR            
+        CALL    READ_LEDCODE    
+        MOV     P2,A            
+        INC     DPTR            
+        CALL    READ_LEDCODE   
+        MOV     P1,A            
+        INC     DPTR            
+        CALL    READ_LEDCODE   
+        MOV     P0,A            
+        INC     DPTR            
+        CALL    DELAY_03S      
+        DJNZ    R0,d3
+        JMP     START1;
+
+
+
+
+
+READ_LEDCODE:
+        MOV     A,#0            
+        MOVC    A,@A+DPTR      
+        RET;
+
+
+
+
+
+DELAY_02S:
+        MOV     R7,#02
+a6:       
+        MOV     R6,#200  
+a5:
+        MOV     R5,#248
+        NOP              
+a4: 
+        DJNZ    R5,a4    
+        DJNZ    R6,a5
+        DJNZ    R7,a6
+        RET
+
+DELAY_01S:
+        MOV     R7,#01
+a3:        
+        MOV     R6,#200 
+a2:
+        MOV     R5,#248
+        NOP             
+a1: 
+        DJNZ    R5,a1    
+        DJNZ    R6,a2
+        DJNZ    R7,a3
+        RET
+
+DELAY_03S:
+        MOV     R7,#03
+a9:        
+        MOV     R6,#200  
+a8:
+        MOV     R5,#248
+        NOP              
+a7: 
+        DJNZ    R5,a7    
+        DJNZ    R6,a8
+        DJNZ    R7,a9
+        RET
+
+
+
+LED_TABLE1:              
+DB 0EEH,0EEH,0EEH,0EEH 
+DB 0DDH,0DDH,0DDH,0DDH 
+DB 0BBH,0BBH,0BBH,0BBH
+DB 77H,77H,77H,77H
+DB 0EEH,0EEH,0EEH,0EEH 
+
+LED_TABLE2:
+DB 77H,77H,77H,77H
+DB 0BBH,0BBH,0BBH,0BBH
+DB 0DDH,0DDH,0DDH,0DDH 
+DB 0EEH,0EEH,0EEH,0EEH 
+	
+LED_TABLE3:
+DB 0FH,0FH,0FH,0FH
+DB 0F0H,0F0H,0F0H,0F0H
+DB 00H,0FFH,00H,0FFH
+DB 0FFH,00H,0FFH,00H
+DB 0FFH,0FFH,00H,00H
+DB 00H,00H,0FFH,0FFH
+DB 0FFH,0FFH,0FFH,0FFH
+DB 00H,00H,00H,00H    
+
+END
+  
