@@ -1,4 +1,4 @@
-   ORG     00H
+ORG     00H
         JMP     START
         ORG     30H
 START1:
